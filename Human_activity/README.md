@@ -32,23 +32,23 @@ Model_name: the model name you want to use (Default: base_model.pth)
 
 The project is divided into 8 python files which contains different functionalities. The files are as follows:
 
-* data_cleaning.py
-  * preprocess the data by removing nan, converting it to a dataframe and then scales it.
+- data_cleaning.py
+  - preprocess the data by removing nan, converting it to a dataframe and then scales it.
 
-* lstm.py
-  * Converts the cleaned data into a Tensor-Dataloader, which is then assigned to a Dataloader. The LSTM model is also defined
-* simulate_data.py
-  * Simulates the data based on a user-defined choice. The simulation uses the body X,y and Z values inside the train Inertial Signals folder, and then plots them to a graph with a span of 2.56 seconds. The graphs are saved in the folder ```/results/```. The user can either simulate one of the activities, or chose to simulate everything.
-* results.py
-  * Plots the accuracy and loss value of the model based on the epochs. It also plots the top 5 most important features used to determine the classes. The graphs are saved in a the folder ```/results/```.
-* train.py
-  * Trains the initialized model with user-defined epoch and model value if preferred.Default is 1000 epochs and base_model.pth(if it exists, else train a new one). Also saves the train/test accuracy and loss values each epoch to file.
-* test.py
-  * Tests the model on the train data
-* utils.py
-  * Different helper functions to save code space. Functions such as save_model, load_model, read_file and save file.
-* main.py
-  * The main program. Uses all the files above to create a user-friendly approach for the user to use the program.
+- lstm.py
+  - Converts the cleaned data into a Tensor-Dataloader, which is then assigned to a Dataloader. The LSTM model is also defined
+- simulate_data.py
+  - Simulates the data based on a user-defined choice. The simulation uses the body X,y and Z values inside the train Inertial Signals folder, and then plots them to a graph with a span of 2.56 seconds. The graphs are saved in the folder ```/results/```. The user can either simulate one of the activities, or chose to simulate everything.
+- results.py
+  - Plots the accuracy and loss value of the model based on the epochs. It also plots the top 5 most important features used to determine the classes. The graphs are saved in a the folder ```/results/```.
+- train.py
+  - Trains the initialized model with user-defined epoch and model value if preferred.Default is 1000 epochs and base_model.pth(if it exists, else train a new one). Also saves the train/test accuracy and loss values each epoch to file.
+- test.py
+  - Tests the model on the train data
+- utils.py
+  - Different helper functions to save code space. Functions such as save_model, load_model, read_file and save file.
+- main.py
+  - The main program. Uses all the files above to create a user-friendly approach for the user to use the program.
 
 ## Results
 
