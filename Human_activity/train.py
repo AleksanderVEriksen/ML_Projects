@@ -1,5 +1,5 @@
 import torch
-from utils import save_to_file, save_model
+from utils import save_to_file
 from tqdm import tqdm
 from torcheval.metrics import MulticlassAccuracy
 from test import evaluation
@@ -7,7 +7,7 @@ from utils import load_model
 # Set the device to GPU if available, otherwise CPU
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-def training(model, train_loader, test_loader, EPOCHS, old_model=False):
+def training(model, train_loader, test_loader, EPOCHS, name:str):
     """
     Trains the LSTM model on the training data.
 
@@ -74,7 +74,7 @@ def training(model, train_loader, test_loader, EPOCHS, old_model=False):
         print(f'\nFinal Loss: {avg_losses_per_epoch[-1]:.4f}, Final Accuracy: {avg_train_accuracy_per_epoch[-1]:.4f}')
 
         # Save loss and accuracy values for plotting to text file
-        save_to_file('results/avg_losses.txt', avg_losses_per_epoch)
-        save_to_file('results/avg_accuracy.txt', avg_train_accuracy_per_epoch)
-        save_to_file('results/avg_test_accuracy.txt', avg_test_accuracy_per_epoch)
+        save_to_file(f'results/avg_losses_{name}.txt', avg_losses_per_epoch)
+        save_to_file(f'results/avg_accuracy_{name}.txt', avg_train_accuracy_per_epoch)
+        save_to_file(f'results/avg_test_accuracy_{name}.txt', avg_test_accuracy_per_epoch)
         return model

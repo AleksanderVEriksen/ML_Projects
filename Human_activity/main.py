@@ -71,7 +71,7 @@ def main(EPOCHS: int = 1000, Mode: str = None, Name:str = 'base_model.pth'):
         # Give user option to overwrite model name
         if Mode == 'train':
             print("Training the model...")
-            model = training(model, train_loader, test_loader, EPOCHS)
+            model = training(model, train_loader, test_loader, EPOCHS, name=Name)
             print("Model trained.")
             name = input("Overwrite model name : y/n ")
             if name.lower() == 'y':

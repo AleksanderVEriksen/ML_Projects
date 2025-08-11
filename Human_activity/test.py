@@ -1,8 +1,7 @@
 import torch
-from utils import load_model
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-def evaluation(test_loader, model, old_model=False):
+def evaluation(test_loader, model):
     """
     Evaluates the model on the test data.
 
@@ -14,21 +13,18 @@ def evaluation(test_loader, model, old_model=False):
     Returns:
         float: The accuracy of the model on the test set.
     """
-    if old_model:
-        load_model(model)
-    else:
-        correct = 0
-        total = 0
+    correct = 0
+    total = 0
 
-        with torch.no_grad():
-            model.eval()
-            for test_tensor, test_labels in (test_loader):
-                test_tensor = test_tensor.to(device)
-                test_labels = test_labels.to(device)
-                outputs = model(test_tensor.unsqueeze(1))  # Add sequence dimension
-                _, predicted = torch.max(outputs.data, 1)
-                total += test_labels.size(0)
-                correct += (predicted == test_labels).sum().item()
+    with torch.no_grad():
+        model.eval()
+        for test_tensor, test_labels in (test_loader):
+            test_tensor = test_tensor.to(device)
+            test_labels = test_labels.to(device)
+            outputs = model(test_tensor.unsqueeze(1))  # Add sequence dimension
+            _, predicted = torch.max(outputs.data, 1)
+            total += test_labels.size(0)
+            correct += (predicted == test_labels).sum().item()
 
-        accuracy = 100 * correct / total
-        return accuracy
+    accuracy = 100 * correct / total
+    return accuracy
