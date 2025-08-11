@@ -25,7 +25,7 @@ The activities are WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, STANDING, SITT
 """
 python main.py [EPOCHS] [MODE] [Model_name]
 
-EPOCHS: how many epochs you want to use to train the model (Default: 1000)
+EPOCHS: how many epochs you want to use to train the model (Default: 100)
 
 MODE: [train, test, plot, simulate] If you want to run a specific task (Default: None)
 

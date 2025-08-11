@@ -9,6 +9,7 @@ from test import evaluation
 import os
 
 def print_usage():
+    print("\n------------------------------------------------" )
     print("Usage: python main.py [EPOCHS] [Mode] [Model_name]")
     print("  EPOCHS (optional): Number of training epochs (default: 1000)")
     print("  Mode (optional): If set, loads the model and performs the specified operation:")
@@ -19,18 +20,20 @@ def print_usage():
     print("  Model_name (optional): Model_name of the model file to use (default: 'base_model.pth')")
 
 def print_models():
+    print("------------------------------------------------" )
     print("Available models:")
-    models_dir = 'models'
+    models_dir = 'Human_activity/models'
     if os.path.exists(models_dir):
         models = [f for f in os.listdir(models_dir) if f.endswith('.pth')]
         if models:
-            print("\n".join(models))
+            for model in models:
+                print(f"- {model}")
         else:
             print("No models found.")
     else:
         print("Models directory does not exist.")
 
-def main(EPOCHS: int = 10, Mode: str = None, Model_name:str = 'base_model.pth'):
+def main(EPOCHS: int, Mode: str = None, Model_name:str = 'base_model.pth'):
     Model_name = Model_name.strip()  # Add this line at the start of your main function
     if not Model_name.endswith('.pth'):
         Model_name += '.pth'
@@ -106,16 +109,16 @@ def main(EPOCHS: int = 10, Mode: str = None, Model_name:str = 'base_model.pth'):
             run_simulation()
 
 if __name__ == "__main__":
-    print("Welcome to the Human Activity Recognition Project!")
+    print("\nWelcome to the Human Activity Recognition Project!")
     print("This project uses LSTM to classify human activities based on sensor data.")
-    print("Press -h or --help for usage instructions.")
+    print("\nPress -h or --help for usage instructions.")
     if len(sys.argv) >= 2 and sys.argv[1] in ("-h", "--help", "help"):
         print_usage()
         print_models()
         sys.exit(0)
     mode_list = ['train', 'test', 'plot', 'simulate']
     # Default values
-    epochs = 10
+    epochs = 100
     Mode = None
     model_name = 'base_model'
 
