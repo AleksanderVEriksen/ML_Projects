@@ -31,7 +31,7 @@ def read_file(filename):
     return values
 
 
-def save_model(model, path='models/', name='base_model.pth'):
+def save_model(model, path='Human_activity/models/', name='base_model.pth'):
     """
     Saves the trained model to the specified path.
     """
@@ -42,7 +42,7 @@ def save_model(model, path='models/', name='base_model.pth'):
     os.makedirs(os.path.dirname(full_path), exist_ok=True)
     torch.save(model.state_dict(), full_path)
 
-def load_model(model, path='models/', name='base_model.pth'):
+def load_model(model, path='Human_activity/models/', name='base_model.pth'):
     """
     Loads the model state from the specified path.
     

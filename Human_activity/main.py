@@ -9,13 +9,14 @@ from test import evaluation
 import os
 
 def print_usage():
-    print("Usage: python main.py [EPOCHS] [Mode] [Name]")
+    print("Usage: python main.py [EPOCHS] [Mode] [Model_name]")
     print("  EPOCHS (optional): Number of training epochs (default: 1000)")
     print("  Mode (optional): If set, loads the model and performs the specified operation:")
+    print("    - 'simulate': simulate activity data")
     print("    - 'train': Train the model")
     print("    - 'test': Evaluate the model on the test set")
     print("    - 'plot': Plot the training results")
-    print("  Name (optional): Name of the model file to use (default: 'base_model.pth')")
+    print("  Model_name (optional): Model_name of the model file to use (default: 'base_model.pth')")
 
 def print_models():
     print("Available models:")
@@ -29,66 +30,63 @@ def print_models():
     else:
         print("Models directory does not exist.")
 
-def main(EPOCHS: int = 1000, Mode: str = None, Name:str = 'base_model.pth'):
-    Name = Name.strip()  # Add this line at the start of your main function
-    if not Name.endswith('.pth'):
-        Name += '.pth'
+def main(EPOCHS: int = 1000, Mode: str = None, Model_name:str = 'base_model.pth'):
+    Model_name = Model_name.strip()  # Add this line at the start of your main function
+    if not Model_name.endswith('.pth'):
+        Model_name += '.pth'
     # Step 1: Data Preparation
-    print("Setting up and cleaning data...")
     train_df, test_df = setup_data()
-    print("Data ready.")
 
-    # Step 2: Simulation
-    run_simulation()
-
-    # Step 3: Model Initialization
+    # Step 2: Model Initialization
     train_loader, test_loader = data_to_loader(train_df, test_df)
     model = init_model(train_df, test_df)
 
-    # Checks if the userdefined model exist
-    if Name != 'base_model.pth':
-        if os.path.exists('models/' + Name):
-            model = load_model(model, name=Name)
+    # Checks if the user-defined model exist
+    if Model_name != 'base_model.pth':
+        if os.path.exists('models/' + Model_name):
+            model = load_model(model, name=Model_name)
     
     # If Mode is not specified, do all steps
-    if Mode is None and Name == 'base_model.pth' or Mode is None and Name != 'base_model.pth':
+    if Mode is None and Model_name == 'base_model.pth' or Mode is None and Model_name != 'base_model.pth':
+        
+        # Step 3: Simulation
+        run_simulation()
         # Step 4: Training & Evaluation
         print("Starting training...")
-        model = training(model, train_loader, test_loader, EPOCHS, name=Name)
+        model = training(model, train_loader, test_loader, EPOCHS, Model_name=Model_name)
         # Step 5: Save Model
         print("Saving model...")
-        save_model(model, name=Name)
+        save_model(model, name=Model_name)
         print("Model saved.")
-
         # Step 6: Plotting
         print("Plotting results...")
-        loss_and_accuracy()
+        loss_and_accuracy(Model_name)
         print("Plotting feature importance...")
-        plot_feature_importance(model) 
+        plot_feature_importance(model, Model_name) 
         print("All steps complete.")
     # If Mode is specified, check if the model exists
     if Mode is not None:
-        if not os.path.exists('models/' + Name):
-            print(f"Model {Name} does not exist. Please train the model first before adjusting the mode.")
+        if not os.path.exists('Human_activity/models/' + Model_name):
+            print(f"Model {Model_name} does not exist. Please train the model first before adjusting the mode.")
             return
-        # If Mode is train, only train the model regardless of the model name
-        # Give user option to overwrite model name
+        # If Mode is train, only train the model regardless of the model Model_name
+        # Give user option to overwrite model Model_name
         if Mode == 'train':
             print("Training the model...")
-            model = training(model, train_loader, test_loader, EPOCHS, name=Name)
+            model = training(model, train_loader, test_loader, EPOCHS, Model_name=Model_name)
             print("Model trained.")
-            name = input("Overwrite model name : y/n ")
-            if name.lower() == 'y':
-                name = input("Enter new model name (default: base_model.pth): ")
-                if not name.endswith('.pth'):
-                    name += '.pth'
-                save_model(model, name=name)
-            elif name.lower() == 'n':
-                print("Model saved as current name.")
-                name = Name
+            Model_name = input("Overwrite model Model_name : y/n ")
+            if Model_name.lower() == 'y':
+                Model_name = input("Enter new model Model_name (default: base_model.pth): ")
+                if not Model_name.endswith('.pth'):
+                    Model_name += '.pth'
+                save_model(model, name=Model_name)
+            elif Model_name.lower() == 'n':
+                print("Model saved as current Model_name.")
+                Model_name = Model_name
             else:
                 print("Invalid input. Model not saved.")
-            save_model(model, name=Name)
+            save_model(model, name=Model_name)
 
         # If Mode is test, only evaluate the model
         elif Mode == 'test':
@@ -99,11 +97,12 @@ def main(EPOCHS: int = 1000, Mode: str = None, Name:str = 'base_model.pth'):
         # If Mode is plot, only plot the results
         elif Mode == 'plot':
             print("Plotting results...")
-            loss_and_accuracy()
+            loss_and_accuracy(Model_name)
             print("Plotting feature importance...")
-            plot_feature_importance(model)
-
-
+            plot_feature_importance(model, Model_name)
+        elif Mode == 'simulate':
+            print("Simulating activity data...")
+            run_simulation()
 
 if __name__ == "__main__":
     print("Welcome to the Human Activity Recognition Project!")
@@ -113,19 +112,22 @@ if __name__ == "__main__":
         print_usage()
         print_models()
         sys.exit(0)
-    mode_list = ['train', 'test', 'plot']
+    mode_list = ['train', 'test', 'plot', 'simulate']
     # Default values
     epochs = 1000
     Mode = None
-    model = 'base_model'
+    model_name = 'base_model'
     # Parse arguments if provided
     if len(sys.argv) > 1:
         epochs = int(sys.argv[1])
     if len(sys.argv) > 2 and sys.argv[2] in mode_list:
         Mode = sys.argv[2]
+    if len(sys.argv) > 2 and sys.argv[2] not in mode_list:
+        print(f"Invalid mode: {sys.argv[2]}. Available modes: {', '.join(mode_list)}")
+        sys.exit(1)
     if len(sys.argv) > 3:
         if not sys.argv[3].endswith('.pth'):
-            model = sys.argv[3] + '.pth'
+            model_name = sys.argv[3] + '.pth'
         else:
-            model = sys.argv[3]
-    main(epochs, Mode, model)
+            model_name = sys.argv[3]
+    main(epochs, Mode, model_name)
