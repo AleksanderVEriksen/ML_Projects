@@ -21,12 +21,18 @@ The activities are WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, STANDING, SITT
 
 - args:
 
-```python
+```text
 """
 python main.py [EPOCHS] [MODE] [Model_name]
+
 EPOCHS: how many epochs you want to use to train the model (Default: 1000)
+
 MODE: [train, test, plot, simulate] If you want to run a specific task (Default: None)
+
 Model_name: the model name you want to use (Default: base_model.pth)
+
+- h: Overview of args and available models (if they exist)
+
 """
 ```
 
