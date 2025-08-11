@@ -3,8 +3,11 @@ from utils import save_to_file
 from tqdm import tqdm
 from torcheval.metrics import MulticlassAccuracy
 from test import evaluation
+import os
 # Set the device to GPU if available, otherwise CPU
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+RESULTS_DIR = 'Human_activity/results/'
 
 def training(model, train_loader, test_loader, EPOCHS, name:str):
     """
@@ -18,9 +21,9 @@ def training(model, train_loader, test_loader, EPOCHS, name:str):
     Returns:
         tuple: A tuple containing the trained model, average losses, and average accuracy per epoch.
     """
-    
+    if name.endswith('.pth'):
+        name = name[:-4]
     # Get the labels from the training loader
-
     labels = train_loader.dataset.tensors[1]
     classes = len(torch.unique(labels))
     # Initialize the accuracy metric
@@ -69,7 +72,7 @@ def training(model, train_loader, test_loader, EPOCHS, name:str):
     print(f'\nFinal Loss: {avg_losses_per_epoch[-1]:.4f}, Final Accuracy: {avg_train_accuracy_per_epoch[-1]:.4f}')
 
     # Save loss and accuracy values for plotting to text file
-    save_to_file(f'results/avg_losses_{name}.txt', avg_losses_per_epoch)
-    save_to_file(f'results/avg_accuracy_{name}.txt', avg_train_accuracy_per_epoch)
-    save_to_file(f'results/avg_test_accuracy_{name}.txt', avg_test_accuracy_per_epoch)
+    save_to_file(os.path.join(RESULTS_DIR,'/avg_losses_{name}.txt'), avg_losses_per_epoch)
+    save_to_file(os.path.join(RESULTS_DIR,'/avg_accuracy_{name}.txt'), avg_train_accuracy_per_epoch)
+    save_to_file(os.path.join(RESULTS_DIR,'/avg_test_accuracy_{name}.txt'), avg_test_accuracy_per_epoch)
     return model

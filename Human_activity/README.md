@@ -50,7 +50,7 @@ The project is divided into 8 python files which contains different functionalit
 - results.py
   - Plots the accuracy and loss value of the model based on the epochs. It also plots the top 5 most important features used to determine the classes. The graphs are saved in a the folder ```/results/```.
 - train.py
-  - Trains the initialized model with user-defined epoch and model value if preferred.Default is 1000 epochs and base_model.pth(if it exists, else train a new one). Also saves the train/test accuracy and loss values each epoch to file.
+  - Trains the initialized model with user-defined epoch and model value if preferred.Default is 1000 epochs and base_model.pth(if it exists, else train a new one). Also saves the train/test accuracy and loss values each epoch to file. The training loop uses ```tqdm``` to show a progress bar towards completion, and is also printing accuracy and loss every 1/10 of the total epoch.
 - test.py
   - Tests the model on the train data
 - utils.py

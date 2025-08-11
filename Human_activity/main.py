@@ -67,14 +67,14 @@ def main(EPOCHS: int = 1000, Mode: str = None, Model_name:str = 'base_model.pth'
     # If Mode is specified, check if the model exists
     if Mode is not None:
         if not os.path.exists('Human_activity/models/' + Model_name):
-            print(f"Model {Model_name} does not exist. Please check the name for spelling errors, or start the program without changing the Mode.")
+            print(f"Model {Model_name} does not exist. Please check the name for spelling errors, or start the program without changing the model_name.")
             print("Usage: python main.py [EPOCHS] [Mode] [Model_name]")
             return
         # If Mode is train, only train the model regardless of the model Model_name
         # Give user option to overwrite model Model_name
         if Mode == 'train':
             print("Training the model...")
-            model = training(model, train_loader, test_loader, EPOCHS, Model_name=Model_name)
+            model = training(model, train_loader, test_loader, EPOCHS, name=Model_name)
             print("Model trained.")
             Model_name = input("Overwrite model Model_name : y/n ")
             if Model_name.lower() == 'y':
