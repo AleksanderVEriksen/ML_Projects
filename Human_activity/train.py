@@ -34,47 +34,43 @@ def training(model, train_loader, test_loader, EPOCHS, name:str):
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-    if old_model:
-        # Load the model from disk if old_model is True
-        model = load_model(model)
-    else:
-        # Train loop
-        model.to(device)
-        for epoch in tqdm(range(EPOCHS), desc="Training"):
-            model.train()
-            cumulative_loss = 0.0
-            metric.reset()
-            for i, (train_tensor, train_labels) in enumerate(train_loader):
-                train_tensor = train_tensor.to(device)
-                train_labels = train_labels.to(device)
-                # Forward pass
-                optimizer.zero_grad()
-                outputs = model(train_tensor.unsqueeze(1))  # Add sequence dimension
-                loss = criterion(outputs, train_labels)
-                # Backward pass and optimization
-                loss.backward()
-                optimizer.step()
-                cumulative_loss += loss.item()
-                # Calculate accuracy
-                metric.update(outputs, train_labels)
-            avg_loss = cumulative_loss / len(train_loader)
-            avg_acc = metric.compute().item()
-            avg_losses_per_epoch.append(avg_loss)
-            avg_train_accuracy_per_epoch.append(avg_acc)
-            
-            # Evaluate on test set at the end of each epoch
-            test_accuracy = evaluation(test_loader, model)
-            avg_test_accuracy_per_epoch.append(test_accuracy)
-            if epoch % 10 == 0 or epoch == EPOCHS - 1:
-                print(f'Epoch [{epoch+1}/{EPOCHS}] - Loss: {avg_loss:.4f}, Train Accuracy: {avg_acc:.4f}, Test Accuracy: {test_accuracy:.4f}')
+    # Train loop
+    model.to(device)
+    for epoch in tqdm(range(EPOCHS), desc="Training"):
+        model.train()
+        cumulative_loss = 0.0
+        metric.reset()
+        for i, (train_tensor, train_labels) in enumerate(train_loader):
+            train_tensor = train_tensor.to(device)
+            train_labels = train_labels.to(device)
+            # Forward pass
+            optimizer.zero_grad()
+            outputs = model(train_tensor.unsqueeze(1))  # Add sequence dimension
+            loss = criterion(outputs, train_labels)
+            # Backward pass and optimization
+            loss.backward()
+            optimizer.step()
+            cumulative_loss += loss.item()
+            # Calculate accuracy
+            metric.update(outputs, train_labels)
+        avg_loss = cumulative_loss / len(train_loader)
+        avg_acc = metric.compute().item()
+        avg_losses_per_epoch.append(avg_loss)
+        avg_train_accuracy_per_epoch.append(avg_acc)
+        
+        # Evaluate on test set at the end of each epoch
+        test_accuracy = evaluation(test_loader, model)
+        avg_test_accuracy_per_epoch.append(test_accuracy)
+        if epoch % 10 == 0 or epoch == EPOCHS - 1:
+            print(f'Epoch [{epoch+1}/{EPOCHS}] - Loss: {avg_loss:.4f}, Train Accuracy: {avg_acc:.4f}, Test Accuracy: {test_accuracy:.4f}')
 
 
-        print("\n-------Training complete-------")
-        print(f'\n\nEpoch [{epoch+1}/{EPOCHS}], Loss: {loss.item():.4f}')
-        print(f'\nFinal Loss: {avg_losses_per_epoch[-1]:.4f}, Final Accuracy: {avg_train_accuracy_per_epoch[-1]:.4f}')
+    print("\n-------Training complete-------")
+    print(f'\n\nEpoch [{epoch+1}/{EPOCHS}], Loss: {loss.item():.4f}')
+    print(f'\nFinal Loss: {avg_losses_per_epoch[-1]:.4f}, Final Accuracy: {avg_train_accuracy_per_epoch[-1]:.4f}')
 
-        # Save loss and accuracy values for plotting to text file
-        save_to_file(f'results/avg_losses_{name}.txt', avg_losses_per_epoch)
-        save_to_file(f'results/avg_accuracy_{name}.txt', avg_train_accuracy_per_epoch)
-        save_to_file(f'results/avg_test_accuracy_{name}.txt', avg_test_accuracy_per_epoch)
-        return model
+    # Save loss and accuracy values for plotting to text file
+    save_to_file(f'results/avg_losses_{name}.txt', avg_losses_per_epoch)
+    save_to_file(f'results/avg_accuracy_{name}.txt', avg_train_accuracy_per_epoch)
+    save_to_file(f'results/avg_test_accuracy_{name}.txt', avg_test_accuracy_per_epoch)
+    return model
