@@ -3,6 +3,31 @@
 This project utilizes an LSTM approach to classify human activities based on sensor data from a waist-mounted smartphone. The data can be acquired from [Dataset](https://archive.ics.uci.edu/dataset/240/human+activity+recognition+using+smartphones).
 The activities are WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, STANDING, SITTING, and LAYING.
 
+## How to run in cmd
+
+### Install dependencies
+
+```pip install -r requirements```
+
+### Run main
+
+- run within the ML_Project folder:
+
+```python Human_activities/main.py```
+
+- run within the Human_activities folder:
+
+```python main.py```
+
+- args:
+
+```python
+python main.py [EPOCHS] [MODE] [Model_name]
+EPOCHS: how many epochs you want to use to train the model (Default: 1000)
+MODE: [train, test, plot, simulate] If you want to run a specific task (Default: None)
+Model_name: the model name you want to use (Default: base_model.pth)
+```
+
 ## The project
 
 The project is divided into 8 python files which contains different functionalities. The files are as follows:
