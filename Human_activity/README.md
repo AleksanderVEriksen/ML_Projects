@@ -26,8 +26,11 @@ The project is divided into 8 python files which contains different functionalit
   * The main program. Uses all the files above to create a user-friendly approach for the user to use the program.
 
 ## Results
+
 This is the result of the model. The results contain the graphs for the simulation of all activities, loss and accuracy of the model, and the top 5 features used to classify.
+
 ### Activity simulation
+
 <img width="1200" height="600" alt="simulated_activity_WALKING" src="https://github.com/user-attachments/assets/3d55bb1e-9cb8-433c-9bef-a6caf15171f5" />
 <img width="1200" height="600" alt="Simulated_Activity_WALKING_UPSTAIRS" src="https://github.com/user-attachments/assets/72257b61-67fc-4936-b8a7-bcd5717cf609" />
 <img width="1200" height="600" alt="Simulated_Activity_WALKING_DOWNSTAIRS" src="https://github.com/user-attachments/assets/971c2285-e826-4e53-8648-b80a25b02f6e" />
@@ -35,9 +38,10 @@ This is the result of the model. The results contain the graphs for the simulati
 <img width="1200" height="600" alt="Simulated_Activity_SITTING" src="https://github.com/user-attachments/assets/ac80271d-3526-450e-8677-ba5a5b8e4f6f" />
 <img width="1200" height="600" alt="simulated_activity_STANDING" src="https://github.com/user-attachments/assets/9886a0f8-e2a7-47fe-91fb-482180a73506" />
 
-
 ### Accuracy and Loss
+
 <img width="1200" height="600" alt="loss_accuracy_curve_base_model" src="https://github.com/user-attachments/assets/ed903bfd-9260-4883-8557-aa605ad15b00" />
 
 ### Top 5 features
+
 <img width="800" height="400" alt="top5feature_importance_base_model pth" src="https://github.com/user-attachments/assets/767ed94d-3374-4bae-962e-db4eabfaaaf2" />
