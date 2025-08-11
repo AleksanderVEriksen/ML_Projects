@@ -3,7 +3,6 @@ from utils import save_to_file
 from tqdm import tqdm
 from torcheval.metrics import MulticlassAccuracy
 from test import evaluation
-from utils import load_model
 # Set the device to GPU if available, otherwise CPU
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
