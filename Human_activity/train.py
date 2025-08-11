@@ -69,10 +69,11 @@ def training(model, train_loader, test_loader, EPOCHS, name:str):
 
     print("\n-------Training complete-------")
     print(f'\n\nEpoch [{epoch+1}/{EPOCHS}], Loss: {loss.item():.4f}')
-    print(f'\nFinal Loss: {avg_losses_per_epoch[-1]:.4f}, Final Accuracy: {avg_train_accuracy_per_epoch[-1]:.4f}')
-
+    print(f'\nFinal Loss: {avg_losses_per_epoch[-1]:.4f}, Final Accuracy: {avg_train_accuracy_per_epoch[-1]:.4f}\n')
+    # Create directory
+    os.makedirs(os.path.join(RESULTS_DIR, name), exist_ok=True)
     # Save loss and accuracy values for plotting to text file
-    save_to_file(os.path.join(RESULTS_DIR,'/avg_losses_{name}.txt'), avg_losses_per_epoch)
-    save_to_file(os.path.join(RESULTS_DIR,'/avg_accuracy_{name}.txt'), avg_train_accuracy_per_epoch)
-    save_to_file(os.path.join(RESULTS_DIR,'/avg_test_accuracy_{name}.txt'), avg_test_accuracy_per_epoch)
+    save_to_file(os.path.join(RESULTS_DIR,f'{name}/avg_losses_{name}.txt'), avg_losses_per_epoch)
+    save_to_file(os.path.join(RESULTS_DIR,f'{name}/avg_accuracy_{name}.txt'), avg_train_accuracy_per_epoch)
+    save_to_file(os.path.join(RESULTS_DIR,f'{name}/avg_test_accuracy_{name}.txt'), avg_test_accuracy_per_epoch)
     return model

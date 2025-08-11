@@ -30,7 +30,7 @@ def print_models():
     else:
         print("Models directory does not exist.")
 
-def main(EPOCHS: int = 1000, Mode: str = None, Model_name:str = 'base_model.pth'):
+def main(EPOCHS: int = 10, Mode: str = None, Model_name:str = 'base_model.pth'):
     Model_name = Model_name.strip()  # Add this line at the start of your main function
     if not Model_name.endswith('.pth'):
         Model_name += '.pth'
@@ -45,15 +45,15 @@ def main(EPOCHS: int = 1000, Mode: str = None, Model_name:str = 'base_model.pth'
     if Model_name != 'base_model.pth':
         if os.path.exists('models/' + Model_name):
             model = load_model(model, name=Model_name)
-    
+    print(EPOCHS, Mode, Model_name)
     # If Mode is not specified, do all steps
     if Mode is None and Model_name == 'base_model.pth' or Mode is None and Model_name != 'base_model.pth':
         
         # Step 3: Simulation
         run_simulation()
         # Step 4: Training & Evaluation
-        print("Starting training...")
-        model = training(model, train_loader, test_loader, EPOCHS, Model_name=Model_name)
+        print("\n---Starting training---\n")
+        model = training(model, train_loader, test_loader, EPOCHS, name=Model_name)
         # Step 5: Save Model
         print("Saving model...")
         save_model(model, name=Model_name)
@@ -73,20 +73,20 @@ def main(EPOCHS: int = 1000, Mode: str = None, Model_name:str = 'base_model.pth'
         # If Mode is train, only train the model regardless of the model Model_name
         # Give user option to overwrite model Model_name
         if Mode == 'train':
-            print("Training the model...")
-            model = training(model, train_loader, test_loader, EPOCHS, name=Model_name)
-            print("Model trained.")
-            Model_name = input("Overwrite model Model_name : y/n ")
-            if Model_name.lower() == 'y':
+            answer = input(f"Overwrite model model_name: {Model_name}? (y/n) - ")
+            if answer.lower() == 'y':
                 Model_name = input("Enter new model Model_name (default: base_model.pth): ")
                 if not Model_name.endswith('.pth'):
                     Model_name += '.pth'
-                save_model(model, name=Model_name)
-            elif Model_name.lower() == 'n':
+                print(f"Training model and saving as {Model_name}")
+                model = training(model, train_loader, test_loader, EPOCHS, name=Model_name)
+            elif answer.lower() == 'n':
                 print("Model saved as current Model_name.")
                 Model_name = Model_name
+                model = training(model, train_loader, test_loader, EPOCHS, name=Model_name)
             else:
-                print("Invalid input. Model not saved.")
+                print("Invalid input. (y/n)")
+                sys.exit(1)
             save_model(model, name=Model_name)
 
         # If Mode is test, only evaluate the model
@@ -115,18 +115,49 @@ if __name__ == "__main__":
         sys.exit(0)
     mode_list = ['train', 'test', 'plot', 'simulate']
     # Default values
-    epochs = 1000
+    epochs = 10
     Mode = None
     model_name = 'base_model'
+
     # Parse arguments if provided
-    if len(sys.argv) > 1:
-        epochs = int(sys.argv[1])
-    if len(sys.argv) > 2 and sys.argv[2] in mode_list:
-        Mode = sys.argv[2]
-    if len(sys.argv) > 2 and sys.argv[2] not in mode_list:
-        print(f"Invalid mode: {sys.argv[2]}. Available modes: {', '.join(mode_list)}")
-        sys.exit(1)
+    # ---- One argument provided ----
+    # If epochs is provided, convert it to int
+    if 3 > len(sys.argv) > 1:
+        if sys.argv[1].isdigit():
+            epochs = int(sys.argv[1])
+        elif sys.argv[1] in mode_list:
+            Mode = sys.argv[1]
+        else:
+            model_name = sys.argv[1]
+            if not model_name.endswith('.pth'):
+                model_name += '.pth'
+
+    # ---- Two arguments provided ----
+    # If epochs and mode is provided
+    if 4 > len(sys.argv) > 2:
+        if sys.argv[1].isdigit():
+            epochs = int(sys.argv[1])
+            if sys.argv[2] in mode_list:
+                Mode = sys.argv[2]
+            else:
+                print(f"Invalid mode: {sys.argv[2]}. Available modes: {', '.join(mode_list)}")
+        elif sys.argv[1] in mode_list:
+            Mode = sys.argv[1]
+            model_name = sys.argv[2]
+            if not model_name.endswith('.pth'):
+                model_name += '.pth'
+        elif sys.argv[1] not in mode_list:
+            print(f"Invalid mode: {sys.argv[1]}. Available modes: {', '.join(mode_list)}")
+            sys.exit(1)
+
+    # -- Three arguments provided --
     if len(sys.argv) > 3:
+        if sys.argv[1].isdigit():
+            epochs = int(sys.argv[1])
+        else:
+            print(f"Invalid epochs: {sys.argv[1]}. It should be a number.")
+            sys.exit(1)
+        Mode = sys.argv[2] if sys.argv[2] in mode_list else None
         if not sys.argv[3].endswith('.pth'):
             model_name = sys.argv[3] + '.pth'
         else:

@@ -89,6 +89,12 @@ def run_simulation():
     """
     print("Running simulation for a specific activity...")
     show_activity_labels()
-    activity_id = int(input("Enter the activity ID (1-7): "))
-    num_windows = int(input("Enter the number of windows to simulate (default is 1): ") or 1)
-    simulate_activity_data(activity_id, num_windows)
+    activity_id = (input("Enter the activity ID (1-7) or Q to skip: "))
+    
+    if activity_id.lower() == 'q':
+        print("\n---Skipping simulation.---")
+        return
+    else:
+        num_windows = int(input("Enter the number of windows to simulate (default is 1): ") or 1)
+        activity_id = int(activity_id)        
+        simulate_activity_data(activity_id, num_windows)

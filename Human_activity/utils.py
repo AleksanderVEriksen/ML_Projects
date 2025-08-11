@@ -35,6 +35,7 @@ def save_model(model, path='Human_activity/models/', name='base_model.pth'):
     """
     Saves the trained model to the specified path.
     """
+
     # Ensure path ends with a separator
     if not path.endswith(os.sep):
         path += os.sep
@@ -54,6 +55,7 @@ def load_model(model, path='Human_activity/models/', name='base_model.pth'):
     Returns:
         torch.nn.Module: The model with loaded state.
     """
+
     # Ensure path ends with a separator
     if not path.endswith(os.sep):
         path += os.sep

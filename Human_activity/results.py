@@ -11,8 +11,8 @@ def loss_and_accuracy(name:str):
     if name.endswith('.pth'):
         name = name[:-4]
     # Load the average losses and accuracy from the text files
-    losses_path = os.path.join(RESULTS_DIR, f'avg_losses_{name}.txt')
-    accuracy_path = os.path.join(RESULTS_DIR, f'avg_accuracy_{name}.txt')
+    losses_path = os.path.join(RESULTS_DIR, f'{name}/avg_losses_{name}.txt')
+    accuracy_path = os.path.join(RESULTS_DIR, f'{name}/avg_accuracy_{name}.txt')
     if not os.path.exists(losses_path) or not os.path.exists(accuracy_path):
         print("Loss and accuracy files not found. Please ensure they are generated during training.")
         return
@@ -29,7 +29,7 @@ def loss_and_accuracy(name:str):
     plt.legend()
     plt.grid()
     plt.tight_layout()
-    plt.savefig(os.path.join(RESULTS_DIR, f'loss_accuracy_curve_{name}.png'))
+    plt.savefig(os.path.join(RESULTS_DIR, f'{name}/loss_accuracy_curve_{name}.png'))
     plt.show()
 
 def plot_feature_importance(model, name:str):
@@ -39,9 +39,9 @@ def plot_feature_importance(model, name:str):
     Args:
         model (nn.Module): The trained LSTM model.
     """
-    import os
-    import pandas as pd
-    import matplotlib.pyplot as plt
+
+    if name.endswith('.pth'):
+        name = name[:-4]
 
     # Read feature names
     features_path = os.path.join(os.path.dirname(__file__), "UCI HAR Dataset", "features.txt")
@@ -67,5 +67,5 @@ def plot_feature_importance(model, name:str):
     plt.title('Top 5 Feature Importance')
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
-    plt.savefig(os.path.join(RESULTS_DIR, f"top5feature_importance_{name}.png"))
+    plt.savefig(os.path.join(RESULTS_DIR, f"{name}/top5feature_importance_{name}.png"))
     plt.show()
