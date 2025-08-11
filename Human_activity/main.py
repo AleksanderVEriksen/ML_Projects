@@ -3,6 +3,7 @@ from lstm import init_model, data_to_loader
 from train import training
 from utils import save_model, load_model
 from results import loss_and_accuracy, plot_feature_importance
+from simulate_data import run_simulation
 import sys
 from test import evaluation
 import os
@@ -37,7 +38,10 @@ def main(EPOCHS: int = 1000, Mode: str = None, Name:str = 'base_model.pth'):
     train_df, test_df = setup_data()
     print("Data ready.")
 
-    # Step 2: Model Initialization
+    # Step 2: Simulation
+    run_simulation()
+
+    # Step 3: Model Initialization
     train_loader, test_loader = data_to_loader(train_df, test_df)
     model = init_model(train_df, test_df)
 
@@ -48,15 +52,15 @@ def main(EPOCHS: int = 1000, Mode: str = None, Name:str = 'base_model.pth'):
     
     # If Mode is not specified, do all steps
     if Mode is None and Name == 'base_model.pth' or Mode is None and Name != 'base_model.pth':
-        # Step 3: Training & Evaluation
+        # Step 4: Training & Evaluation
         print("Starting training...")
-        model = training(model, train_loader, test_loader, EPOCHS)
-        # Step 4: Save Model
+        model = training(model, train_loader, test_loader, EPOCHS, name=Name)
+        # Step 5: Save Model
         print("Saving model...")
         save_model(model, name=Name)
         print("Model saved.")
 
-        # Step 5: Plotting
+        # Step 6: Plotting
         print("Plotting results...")
         loss_and_accuracy()
         print("Plotting feature importance...")
@@ -98,6 +102,9 @@ def main(EPOCHS: int = 1000, Mode: str = None, Name:str = 'base_model.pth'):
             loss_and_accuracy()
             print("Plotting feature importance...")
             plot_feature_importance(model)
+
+
+
 if __name__ == "__main__":
     print("Welcome to the Human Activity Recognition Project!")
     print("This project uses LSTM to classify human activities based on sensor data.")
